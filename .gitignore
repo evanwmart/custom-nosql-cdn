@@ -21,5 +21,3 @@ Cargo.lock
 #.idea/
 
 .vscode/
-
-data.db
