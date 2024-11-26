@@ -21,3 +21,14 @@
 6. [ ] **Extend Data Structure**
    - [ ] Allow more complex values (e.g., nested structures or lists).
    - [ ] Introduce support for queries like "list all keys."
+
+
+
+```bash
+sudo pacman -S valgrind
+sudo pacman -S perf
+cargo install flamegraph
+sudo pacman -S massif-visualizer
+
+
+```

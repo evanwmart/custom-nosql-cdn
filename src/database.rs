@@ -1,3 +1,5 @@
+// src/database.rs
+
 use std::{fs::OpenOptions, io::{self, Read, Write}};
 use sha2::{Sha256, Digest};
 use serde::{Serialize, Deserialize};

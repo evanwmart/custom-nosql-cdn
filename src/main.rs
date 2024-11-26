@@ -1,7 +1,6 @@
-mod database;
-mod http;
-mod logging;
+// src/main.rs
 
+use custom_nosql_cdn::{database, http, logging};
 use std::sync::Arc;
 
 #[tokio::main]

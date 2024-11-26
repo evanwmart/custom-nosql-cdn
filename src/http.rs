@@ -1,3 +1,5 @@
+// src/http.rs
+
 use std::sync::Arc;
 use warp::{Filter, Rejection, Reply, query};
 use serde::Deserialize;
@@ -12,11 +14,15 @@ pub async fn start_server(db: Arc<Database>, logger: Arc<SharedLogger>) {
     let db_filter = warp::any().map(move || Arc::clone(&db));
     let logger_filter = warp::any().map(move || Arc::clone(&logger));
 
+    // Health check route
+    let health_route = warp::path("health")
+        .map(|| "OK");
+
     let log_route = warp::path("logs")
         .and(query::<LogQuery>())
         .and(logger_filter)
         .map(|query: LogQuery, logger: Arc<SharedLogger>| -> Box<dyn Reply> {
-            let logs = logger.get_logs(query.format.as_deref() == Some("json"));
+            let logs = logger.get_logs();
 
             match query.format.as_deref() {
                 Some("json") => Box::new(warp::reply::json(&logs)),
@@ -43,9 +49,18 @@ pub async fn start_server(db: Arc<Database>, logger: Arc<SharedLogger>) {
             handle_insert(key, value, db).await
         });
 
-    let routes = log_route.or(get_route).or(insert_route);
+    // Add health_route to the combined routes
+    let routes = health_route
+        .or(log_route)
+        .or(get_route)
+        .or(insert_route);
 
-    warp::serve(routes).run(([127, 0, 0, 1], 8080)).await;
+    // Add logging for server startup
+    log::info!("Starting server on http://127.0.0.1:8081");
+    
+    warp::serve(routes)
+        .run(([127, 0, 0, 1], 8081))
+        .await;
 }
 
 async fn handle_get(key: String, db: Arc<Database>) -> Result<impl Reply, Rejection> {

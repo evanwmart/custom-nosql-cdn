@@ -25,3 +25,5 @@ Cargo.lock
 data.db
 
 logs/
+
+benchmark_results/
