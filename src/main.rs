@@ -7,11 +7,11 @@ use std::sync::Arc;
 #[tokio::main]
 async fn main() {
     // Initialize logging
-    logging::init();
+    let logger = logging::init_logger();
 
     // Create the database instance
     let db = Arc::new(database::Database::new("data.db".to_string()));
 
     // Start the HTTP server
-    http::start_server(db).await;
+    http::start_server(db, logger).await;
 }
