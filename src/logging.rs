@@ -33,7 +33,7 @@ impl<T> CircularBuffer<T> {
     pub fn push(&self, item: T) {
         let mut buffer = self.buffer.lock().unwrap();
         if buffer.len() == self.capacity {
-            buffer.pop_front(); // Remove the oldest item
+            buffer.pop_front(); 
         }
         buffer.push_back(item);
     }
